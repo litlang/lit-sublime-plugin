@@ -1,0 +1,46 @@
+{
+	"selector": "source.lit",
+	"file_patterns": ["*.lit"], // *.lit.old
+	"file_regex": "^In file (.*), at line ([0-9]+), column (\\d+)",
+
+	"cmd": ["lit", "run", "$file"],
+
+	"variants": [
+		{
+			"name": "lex",
+		    "syntax": "Packages/Lit/syntaxes/Lit_Output.sublime-syntax",
+			"cmd": ["lit", "lex", "$file"],
+		},
+
+		{
+			"name": "parse",
+		    "syntax": "Packages/Lit/syntaxes/Lit_Output.sublime-syntax",
+			"cmd": ["lit", "parse", "$file"],
+		},
+
+		{
+			"name": "run",
+			"cmd": ["lit", "run", "$file"],
+		},
+
+		{
+			"name": "debug.lex",
+			"working_dir": "",
+		    "syntax": "Packages/Lit/syntaxes/Lit_Output.sublime-syntax",
+			"cmd": ["./lit", "lex", "$file"],
+		},
+
+		{
+			"name": "debug.parse",
+			"working_dir": "",
+		    "syntax": "Packages/Lit/syntaxes/Lit_Output.sublime-syntax",
+			"cmd": ["./lit", "parse", "$file"],
+		},
+
+		{
+			"name": "debug.run",
+			"working_dir": "",
+			"cmd": ["./lit", "run", "$file"],
+		},
+	],
+}
