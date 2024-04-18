@@ -1,0 +1,218 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+name: Lit
+file_extensions:
+  - lit
+  - old.lit
+scope: source.lit
+
+contexts:
+  main:
+
+    # escape
+    - match: '`'
+      scope: punctuation.escape.lit
+      push: escape
+
+    # single quoted block string
+    - match: "'''"
+      scope: punctuation.string.begin.single_quote.block.lit
+      push: single_quoted_block_string
+
+    # single quoted string
+    - match: "'"
+      scope: punctuation.string.begin.single_quoted.lit
+      push: single_quoted_string
+
+    # double quoted block string
+    - match: '"""'
+      scope: punctuation.string.begin.double_quoted.block.lit
+      push: double_quoted_block_string
+
+    # double quoted string
+    - match: '"'
+      scope: punctuation.definition.string.begin.double_quoted.lit
+      push: double_quoted_string
+
+    # single line comments
+    - match: ';;.*$'
+      scope: punctuation.definition.comment.line.lit
+
+    - match: '；；.*$'
+      scope: punctuation.definition.comment.double_semicolon.lit
+
+    # multi line comments
+    - match: '#'
+      scope: punctuation.definition.comment.sharp.lit
+      push: sharp_comments
+
+    # keywords
+    - match: '\b(if loop|else if loop|else loop|if|else if|else|loop)\b'
+      scope: keyword.control.lit
+
+    - match: '\b(如果|又如果|否则)\b'
+      scope: keyword.control.lit
+
+    - match: '\b循环\b'
+      scope: keyword.control.loop.lit
+
+    - match: '\bimport\b'
+      scope: keyword.import.lit
+
+    - match: '\b导入\b'
+      scope: keyword.import.lit
+
+    - match: '\bfunc\b'
+      scope: keyword.declaration.function.lit
+
+    - match: '\bclass\b'
+      scope: keyword.declaration.class.lit
+
+    - match: '\bnamespace\b'
+      scope: keyword.declaration.namespace.lit
+
+    - match: '\b命名空间\b'
+      scope: keyword.declaration.namespace.lit
+
+    - match: '\benum\b'
+      scope: keyword.declaration.enum.lit
+
+    # Numbers
+    - match: '\b[0-9]+(\.[0-9]+)?\b'
+      scope: constant.numeric.lit
+
+    # seps
+    - match: ';'
+      scope: punctuation.terminator.lit
+
+    - match: '\.'
+      scope: punctuation.dot.lit
+
+    # operators
+    - match: '(\(|\)|\[|\]|\{|\}|!->|!=>|->|=>)'
+      scope: keyword.operators
+
+    - match: '<<'
+      scope: punctuation.definition.generic.begin.lit
+
+    - match: '>>'
+      scope: punctuation.definition.generic.end.lit
+
+    # op.bitwise
+    - match: '(\*!|\*&|\*^|\*\|)'
+      scope: keyword.operator.bitwise
+
+    # op.assignment
+    - match: '(\+=|\-=|\*=|/=|%=|=)'
+      scope: keyword.operator.assignment
+
+    # op.arithmetic
+    - match: '(\+|\-|\*|/|%|\^/|\^)'
+      scope: keyword.operator.arithmetic.lit
+
+    # op.comparison
+    - match: '(<=|>=|<|>|===|==|!===|!==)' # !< !> !<= !>=
+      scope: keyword.operator.comparison.lit
+
+    # op.logical
+    - match: '(!!|&&|\\\\|\|\|)'
+      scope: keyword.operator.logical
+
+    - match: '\b(true|false)\b'
+      scope: constant.language.boolean.lit
+
+    - match: '\b(真|假)\b'
+      scope: constant.language.boolean.lit
+
+    - match: '\b(null)\b'
+      scope: constant.language.null.lit
+
+    - match: '\b(inf)\b'
+      scope: constant.language.infinity.lit
+
+    - match: '\b(nan)\b'
+      scope: constant.language.nan.lit
+
+  escape:
+
+    - match: "\n"
+      scope: punctuation.seperator.continuation.line.lit
+      pop: true
+
+    - match: '.'
+      scope: invalid
+      pop: true
+      
+  single_quoted_block_string:
+    - meta_scope: string.quoted.single.block.lit
+
+    - match: "'''"
+      scope: punctuation.string.end.single_quoted.block.lit
+      pop: true
+
+  single_quoted_string:
+    - meta_scope: string.quoted.single.lit
+
+    - match: "'"
+      scope: punctuation.definition.string.end.single_quoted.lit
+      pop: true
+
+    - match: "\n"
+      scope: invalid.illegal.unclosed_string.lit
+      pop: true
+
+  double_quoted_block_string:
+    - meta_scope: string.quoted.double.block.lit
+
+    - match: "`"
+      scope: constant.character.escape.lit
+      push: string_escape
+
+    - match: '"""'
+      scope: punctuation.string.end.double_quoted.block.lit
+      pop: true
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.lit
+
+    - match: '`'
+      scope: constant.character.escape.lit
+      push: string_escape
+
+    - match: '"'
+      scope: punctuation.definition.string.end.double_quoted.lit
+      pop: true
+
+    - match: "\n"
+      scope: invalid.illegal.unclosed_string.lit
+      pop: true
+
+  string_escape:
+    - meta_scope: constant.character.escape.lit
+
+    - match: "`"
+      scope: constant.character.escape.self.lit
+      pop: true
+
+    - match: '"'
+      scope: constant.character.escape.double_quote.lit
+      pop: true
+
+    - match: '(u|U)(x|X|\+)([0-9A-Fa-f]+)`'
+      scope: constant.character.escape.unicode.lit
+      pop: true
+
+    - match: '.'
+      scope: invalid.illegal.invalid_string_escape
+      pop: true
+
+
+  sharp_comments:
+    - meta_scope: comment
+
+    - match: '#'
+      scope: punctuation.definition.comment.end.lit
+      pop: true
+
+# raise try-catch-else-final ;; if-else;; func(return)  

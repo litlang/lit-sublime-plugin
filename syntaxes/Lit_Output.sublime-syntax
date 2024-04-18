@@ -1,0 +1,150 @@
+%YAML 1.2
+---
+
+name: Lit Output
+scope: source.lit_output
+hidden: true
+
+contexts:
+
+  main:
+
+    - match: "^In file (.*), at line ([0-9]+), column ([0-9]+)"
+      scope: entity.name.filename
+
+    - match: "^error"
+      scope: message.error
+
+    - match: '^无效字符: '
+      scope: message.error.invalid_character
+    
+    - match: '^\[Finished in \d+ms( with exit code \-?\d+)?\]$'
+      scope: comment
+    - match: '^\[cmd: .*]$'
+      scope: comment
+    - match: '^\[dir: .*]$'
+      scope: comment
+    - match: '^\[path: .*]$'
+      scope: comment
+
+    - match: '<BOF>'
+      scope: comment
+
+    - match: '<EOL>'
+      scope: comment
+
+    - match: '<EOF>'
+      scope: comment
+
+    # single quoted string
+    - match: "'"
+      scope: punctuation.string.begin.single_quoted.lit
+      push: single_quoted_string
+
+    # keywords
+    - match: '\b(if loop|else if loop|else loop|if|else if|else|loop)\b'
+      scope: keyword.control.lit
+
+    - match: '\bimport\b'
+      scope: keyword.import.lit
+
+    - match: '\bfunc\b'
+      scope: keyword.declaration.function.lit
+
+    - match: '\bclass\b'
+      scope: keyword.declaration.class.lit
+
+    - match: '\bnamespace\b'
+      scope: keyword.declaration.namespace.lit
+
+    - match: '\benum\b'
+      scope: keyword.declaration.enum.lit
+
+    # Numbers
+    - match: '\b[0-9]+(\.[0-9]+)?\b'
+      scope: constant.numeric.lit
+
+    # seps
+    - match: ';'
+      scope: punctuation.terminator.lit
+
+    - match: '\.'
+      scope: punctuation.dot.lit
+
+    # operators
+    - match: '(\(|\)|\[|\]|\{|\}|!->|!=>|->|=>)'
+      scope: keyword.operators
+
+    - match: '<<'
+      scope: punctuation.definition.generic.begin.lit
+
+    - match: '>>'
+      scope: punctuation.definition.generic.end.lit
+
+    # op.bitwise
+    - match: '(\*!|\*&|\*^|\*\|)'
+      scope: keyword.operator.bitwise
+
+    # op.assignment
+    - match: '(\+=|\-=|\*=|/=|%=|=)'
+      scope: keyword.operator.assignment
+
+    # op.arithmetic
+    - match: '(\+|\-|\*|/|%|\^/|\^)'
+      scope: keyword.operator.arithmetic.lit
+
+    # op.comparison
+    - match: '(<=|>=|<|>|!=|==)' # !< !> !<= !>=
+      scope: keyword.operator.comparison.lit
+
+    # op.logical
+    - match: '(!!|&&|\\\\|\|\|)'
+      scope: keyword.operator.logical
+
+    - match: '\b(true|false)\b'
+      scope: constant.language.boolean.lit
+
+    - match: '\b(null)\b'
+      scope: constant.language.null.lit
+
+    - match: '\b(inf)\b'
+      scope: constant.language.infinity.lit
+
+    - match: '\b(nan)\b'
+      scope: constant.language.nan.lit
+
+  single_quoted_string:
+    - meta_scope: string.quoted.single.lit
+
+    - match: "'"
+      scope: punctuation.definition.string.end.single_quoted.lit
+      pop: true
+
+    - match: "\n"
+      scope: invalid.illegal.unclosed_string.lit
+      pop: true
+
+  string_escape:
+    - meta_scope: constant.character.escape.lit
+
+    - match: "`"
+      scope: constant.character.escape.self.lit
+      pop: true
+
+    - match: '"'
+      scope: constant.character.escape.double_quote.lit
+      pop: true
+
+    - match: '.'
+      scope: invalid.illegal.invalid_string_escape
+      pop: true
+
+  sharp_comments:
+    - meta_scope: comment
+
+    - match: '`#'
+      scope: constant.character.escape.lit
+
+    - match: '#'
+      scope: punctuation.definition.comment.end.lit
+      pop: true
